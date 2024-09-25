@@ -12,6 +12,7 @@ public class Ball : MonoBehaviour
     public float minLaunchForce = 5f;     // Minimum force applied
     public float maxLaunchForce = 20f;    // Maximum force applied
     public float forceMultiplier = 5f;
+    public Vector2 initialPosition;
 
     [Header("Visual Feedback")]
     public LineRenderer aimingLine;           // Reference to LineRenderer
@@ -51,6 +52,8 @@ public class Ball : MonoBehaviour
         aimingLine.endColor = lineColor;
         aimingLine.startWidth = 0.05f;
         aimingLine.endWidth = 0.05f;
+
+        initialPosition = gameObject.transform.position;
     }
 
     void Update()
@@ -118,11 +121,14 @@ public class Ball : MonoBehaviour
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f;
         // Optionally, reset the ball's position
-        // transform.position = initialPosition;
+        transform.position = initialPosition;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if (collision.gameObject.CompareTag("Reset"))
+        {
+            ResetBall();
+        }
     }
 }
