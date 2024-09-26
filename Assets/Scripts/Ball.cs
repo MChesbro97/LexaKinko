@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
@@ -26,6 +27,11 @@ public class Ball : MonoBehaviour
     private float currentDragDistance;   
     private float calculatedLaunchForce;
 
+    private bool hasCollectedLetter;
+    private float lastCollectionTime = 0f;
+    private float collectionCooldown = 0.5f;
+
+    private GameManager gameManager;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -54,11 +60,19 @@ public class Ball : MonoBehaviour
         aimingLine.endWidth = 0.05f;
 
         initialPosition = gameObject.transform.position;
+
+        gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager not found in the scene.");
+        }
+
+        hasCollectedLetter = false;
     }
 
     void Update()
     {
-        if (isLaunched)
+        if (isLaunched || (gameManager != null && !gameManager.canShoot)) // Check if shooting is disabled
             return;
 
         if (Input.GetMouseButtonDown(0))
@@ -108,6 +122,8 @@ public class Ball : MonoBehaviour
         rb.gravityScale = gravityAfterLaunch;
 
         rb.velocity = launchDirection * calculatedLaunchForce;
+        
+        hasCollectedLetter = false;
 
         // Optional: Add torque or other forces if needed
         // rb.AddTorque(5f, ForceMode2D.Impulse);
@@ -122,6 +138,7 @@ public class Ball : MonoBehaviour
         rb.angularVelocity = 0f;
         // Optionally, reset the ball's position
         transform.position = initialPosition;
+        hasCollectedLetter = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -130,5 +147,16 @@ public class Ball : MonoBehaviour
         {
             ResetBall();
         }
+    }
+
+    public bool CanCollectLetter()
+    {
+        return Time.time - lastCollectionTime > collectionCooldown;
+    }
+
+    public void MarkLetterAsCollected()
+    {
+        hasCollectedLetter = true;
+        lastCollectionTime = Time.time; // Update the last collection time
     }
 }

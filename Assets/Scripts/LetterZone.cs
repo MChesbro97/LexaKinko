@@ -21,10 +21,19 @@ public class LetterZone : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
-            // Add the letter to the GameManager
-            gameManager.CollectLetter(assignedLetter);
+            Ball ball = collision.gameObject.GetComponent<Ball>();
 
-            Debug.Log("Collected letter: " + assignedLetter);
+            if (ball != null && ball.CanCollectLetter()) // Check if the ball can collect the letter
+            {
+                // Add the letter to the GameManager
+                gameManager.CollectLetter(assignedLetter);
+                ball.MarkLetterAsCollected(); // Mark letter as collected
+
+                // Disable this collider to prevent further collections (optional)
+                // collider.enabled = false;
+
+                Debug.Log("Collected letter: " + assignedLetter);
+            }
         }
     }
 
