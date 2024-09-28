@@ -43,17 +43,19 @@ public class WordValidator : MonoBehaviour
         }
     }
 
-    public void ValidateWord(string playerWord)
+    public bool ValidateWord(string playerWord)
     {
         if (validWords.Contains(playerWord.ToUpper().Trim()))
         {
             feedbackText.text = "Valid word!";
             Debug.Log("Word is valid: " + playerWord);
+            return true;
         }
         else
         {
             feedbackText.text = "Invalid word.";
             Debug.Log("Word is invalid: " + playerWord);
+            return false;
         }
     }
 }
