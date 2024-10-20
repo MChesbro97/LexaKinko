@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     private WordValidator wordValidator;
 
-    private Dictionary<char, int> letterPoints = new Dictionary<char, int>()
+    public Dictionary<char, int> letterPoints = new Dictionary<char, int>()
     {
         {'A', 1}, {'E', 1}, {'I', 1}, {'O', 1}, {'U', 1}, {'L', 1}, {'N', 1}, {'S', 1}, {'T', 1}, {'R', 1},
         {'D', 2}, {'G', 2},
@@ -130,7 +130,20 @@ public class GameManager : MonoBehaviour
         collectedLetters.Add(letter);
 
         GameObject letterButton = Instantiate(letterButtonPrefab, letterButtonContainer);
-        letterButton.GetComponentInChildren<TextMeshProUGUI>().text = letter.ToString(); // Set button text to letter
+        TextMeshProUGUI buttonText = letterButton.GetComponentInChildren<TextMeshProUGUI>();
+
+        int letterScore = 1;
+
+        if (letterPoints.TryGetValue(letter, out int baseScore))
+        {
+            letterScore = baseScore;
+        }
+
+        // Update button text to show letter and its score as subscript
+        if (buttonText != null)
+        {
+            buttonText.text = $"{letter}<size=70%><sub>{letterScore}</sub></size>";
+        }
 
         RectTransform buttonRectTransform = letterButton.GetComponent<RectTransform>();
         buttonRectTransform.anchoredPosition = new Vector2(currentXPosition, 0);
@@ -147,6 +160,19 @@ public class GameManager : MonoBehaviour
         if (collectedLetters.Count == maxCollectedLetters)
         {
             DisableShooting();
+        }
+    }
+    public void UpdateLetterScore(char letter, int newScore)
+    {
+        // Find the button corresponding to this letter
+        foreach (Transform child in letterButtonContainer)
+        {
+            TextMeshProUGUI buttonText = child.GetComponentInChildren<TextMeshProUGUI>();
+            if (buttonText != null && buttonText.text.StartsWith(letter.ToString()))
+            {
+                // Update the letter score in the button's text
+                buttonText.text = $"{letter}<size=70%><sub>{newScore}</sub></size>";
+            }
         }
     }
 
@@ -194,6 +220,9 @@ public class GameManager : MonoBehaviour
 
         if (submitButton != null)
             submitButton.gameObject.SetActive(false);
+
+        if (deleteButton != null)
+            deleteButton.gameObject.SetActive(false);
 
         if (feedbackText != null)
         {
@@ -277,4 +306,23 @@ public class GameManager : MonoBehaviour
         return wordScore;
     }
 
+    public void AddPointsToLetter(char letter, int points)
+    {
+        if (letterPoints.ContainsKey(letter))
+        {
+            letterPoints[letter] = points;
+            Debug.Log($"Letter {letter} score updated to {letterPoints[letter]}");
+
+            // Optionally, you can update the UI here if you're tracking letter-specific scores in the UI
+        }
+    }
+
+    public int GetLetterBaseScore(char letter)
+    {
+        if (letterPoints.ContainsKey(letter))
+        {
+            return letterPoints[letter];  // Return the base score for that letter
+        }
+        return 0;  // Default to 0 if the letter isn't found
+    }
 }

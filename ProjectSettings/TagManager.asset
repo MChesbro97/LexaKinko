@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Reset
   - Ball
+  - LetterZone
   layers:
   - Default
   - TransparentFX

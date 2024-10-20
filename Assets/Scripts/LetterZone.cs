@@ -46,9 +46,18 @@ public class LetterZone : MonoBehaviour
 
     private void UpdateLetterText()
     {
-        if (letterText != null)
+        if (letterText != null && gameManager != null)
         {
-            letterText.text = assignedLetter.ToString();
+            // Fetch the score for the assignedLetter from GameManager's letterPoints dictionary
+            int letterScore = 1; // Default value in case the letter is not found (though it should always be found)
+
+            if (gameManager.letterPoints.TryGetValue(assignedLetter, out int score))
+            {
+                letterScore = score;
+            }
+
+            // Update the text to show the letter and its score as a subscript
+            letterText.text = $"{assignedLetter}<size=70%><sub>{letterScore}</sub></size>";
         }
     }
 }

@@ -31,6 +31,8 @@ public class Ball : MonoBehaviour
     private float lastCollectionTime = 0f;
     private float collectionCooldown = 0.5f;
 
+    private int accumulatedPoints;
+
     private GameManager gameManager;
     void Start()
     {
@@ -68,6 +70,7 @@ public class Ball : MonoBehaviour
         }
 
         hasCollectedLetter = false;
+        accumulatedPoints = 0;
     }
 
     void Update()
@@ -143,8 +146,26 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Reset"))
+        if (collision.gameObject.CompareTag("LetterZone"))
         {
+            LetterZone letterZone = collision.gameObject.GetComponent<LetterZone>();
+            if (letterZone != null)
+            {
+                // Get the base score of the letter
+                int baseScore = gameManager.GetLetterBaseScore(letterZone.assignedLetter);
+
+                // Add accumulated points from peg hits
+                int totalScore = baseScore + accumulatedPoints;
+
+                // Update the score in the GameManager
+                gameManager.AddPointsToLetter(letterZone.assignedLetter, totalScore);
+
+                // Update the letter button to reflect the new score
+                gameManager.UpdateLetterScore(letterZone.assignedLetter, totalScore);
+
+                // Reset the accumulated points after applying them
+                accumulatedPoints = 0;
+            }
             ResetBall();
         }
     }
@@ -159,4 +180,11 @@ public class Ball : MonoBehaviour
         hasCollectedLetter = true;
         lastCollectionTime = Time.time; // Update the last collection time
     }
+
+    public void AccumulatePointFromPeg()
+    {
+        accumulatedPoints += 1;
+        Debug.Log("Accumulated Points: " + accumulatedPoints);
+    }
+
 }
