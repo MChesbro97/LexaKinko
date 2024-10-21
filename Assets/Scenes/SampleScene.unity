@@ -269,6 +269,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Peg (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.8737049
@@ -308,6 +312,10 @@ PrefabInstance:
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950660943900649247, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -561,7 +569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 1093145790}
+  letterDisplay: {fileID: 1093145790}
 --- !u!61 &98215708
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -753,6 +761,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Peg (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.6966984
@@ -792,6 +804,10 @@ PrefabInstance:
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950660943900649247, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -844,7 +860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 31551697}
+  letterDisplay: {fileID: 31551697}
 --- !u!61 &144198262
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1238,7 +1254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 352138651}
+  letterDisplay: {fileID: 352138651}
 --- !u!61 &394190504
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1454,6 +1470,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Peg (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.23974419
@@ -1493,6 +1513,10 @@ PrefabInstance:
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950660943900649247, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1545,7 +1569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 1129821099}
+  letterDisplay: {fileID: 1129821099}
 --- !u!61 &495283262
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1804,7 +1828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 1128369961}
+  letterDisplay: {fileID: 1128369961}
 --- !u!61 &583972771
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1896,7 +1920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 1976471615}
+  letterDisplay: {fileID: 1976471615}
 --- !u!61 &594842754
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2132,6 +2156,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Peg (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.674161
@@ -2171,6 +2199,10 @@ PrefabInstance:
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950660943900649247, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3738,7 +3770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 1271231328}
+  letterDisplay: {fileID: 1271231328}
 --- !u!61 &1339801094
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4221,7 +4253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 1351402604}
+  letterDisplay: {fileID: 1351402604}
 --- !u!61 &1466770515
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4413,6 +4445,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Peg (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.8448508
@@ -4453,6 +4489,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6950660943900649247, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4469,6 +4509,10 @@ PrefabInstance:
     - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_Name
       value: Peg (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4509,6 +4553,10 @@ PrefabInstance:
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950660943900649247, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4561,7 +4609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 1761085106}
+  letterDisplay: {fileID: 1761085106}
 --- !u!61 &1616262614
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5022,6 +5070,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Peg (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.2156963
@@ -5061,6 +5113,10 @@ PrefabInstance:
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950660943900649247, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5213,6 +5269,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Peg (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.0757241
@@ -5252,6 +5312,10 @@ PrefabInstance:
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950660943900649247, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5304,7 +5368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 883538695}
+  letterDisplay: {fileID: 883538695}
 --- !u!61 &1783170647
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5396,7 +5460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 1355296682}
+  letterDisplay: {fileID: 1355296682}
 --- !u!61 &1804024923
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5488,7 +5552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 1950545870}
+  letterDisplay: {fileID: 1950545870}
 --- !u!61 &1933974890
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5588,6 +5652,7 @@ MonoBehaviour:
   - {fileID: 1783170646}
   - {fileID: 1616262613}
   canShoot: 1
+  possibleLetters: 4100420043004400450046004700480049004a004b004c004d004e004f0050005100520053005400550056005700580059005a00
 --- !u!4 &1947368113
 Transform:
   m_ObjectHideFlags: 0
@@ -5796,7 +5861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedLetter: 48
-  letterText: {fileID: 696525774}
+  letterDisplay: {fileID: 696525774}
 --- !u!61 &1966401287
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6555,6 +6620,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Peg
       objectReference: {fileID: 0}
+    - target: {fileID: 1312539280133665093, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.85
@@ -6594,6 +6663,10 @@ PrefabInstance:
     - target: {fileID: 6771631266177756349, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950660943900649247, guid: 5aa8b11cc647d9144a6521d29428876c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

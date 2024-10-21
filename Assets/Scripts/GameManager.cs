@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,11 +17,12 @@ public class GameManager : MonoBehaviour
     public Button resetButton;
     public Button deleteButton;
 
-    private List<char> collectedLetters = new List<char>();
+    private List<UsableLetter> collectedUsableLetters = new List<UsableLetter>();
     private List<char> currentWord = new List<char>();
+    private List<GameObject> allPegs = new List<GameObject>();
 
-    public LetterZone[] letterZones; 
-    private char[] possibleLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray(); 
+    public LetterZone[] letterZones;
+    //private char[] possibleLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
     private int maxCollectedLetters = 7;
 
     private float buttonSpacing = 30f;
@@ -42,136 +44,144 @@ public class GameManager : MonoBehaviour
         {'J', 8}, {'X', 8},
         {'Q', 10}, {'Z', 10}
     };
+    public List<char> possibleLetters = new List<char>
+{
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+};
 
     private void Start()
     {
         AssignLettersToZones();
-        if (wordInputText != null)
-            wordInputText.gameObject.SetActive(false);
-
-        if (submitButton != null)
-            submitButton.gameObject.SetActive(false);
-
-        if (feedbackText != null)
-            feedbackText.gameObject.SetActive(false);
-
-        if (resetButton != null)
-            resetButton.gameObject.SetActive(false);
-        if (deleteButton != null)
-        {
-            deleteButton.gameObject.SetActive(false); // Hide initially
-            deleteButton.onClick.AddListener(OnDeleteWord); // Add listener for delete button
-        }
+        wordInputText.gameObject.SetActive(false);
+        submitButton.gameObject.SetActive(false);
+        feedbackText.gameObject.SetActive(false);
+        resetButton.gameObject.SetActive(false);
+        deleteButton.gameObject.SetActive(false); // Hide initially
+        deleteButton.onClick.AddListener(OnDeleteWord);
 
         wordValidator = GetComponent<WordValidator>();
-
-        // Add listener to the submit button
         submitButton.onClick.AddListener(OnSubmitWord);
 
         highscore = PlayerPrefs.GetInt("Highscore", 0);
-
-        // Update high score UI
-        if (highscoreText != null)
-        {
-            highscoreText.text = "Highscore: " + highscore;
-        }
+        highscoreText.text = "Highscore: " + highscore;
     }
 
     public void OnDeleteWord()
     {
-        // Clear the current word
         currentWord.Clear();
 
-        // Reactivate all the letter buttons that were previously used
         foreach (Transform child in letterButtonContainer)
         {
             Button letterButton = child.GetComponent<Button>();
-            if (!letterButton.gameObject.activeSelf)
-            {
-                letterButton.gameObject.SetActive(true); // Reactivate button
-            }
+            letterButton.gameObject.SetActive(true); // Reactivate button
         }
 
-        // Reset word input text UI
         UpdateWordInputUI();
-
-        // Optionally hide the delete button if no word is formed
-        if (deleteButton != null)
-        {
-            deleteButton.gameObject.SetActive(false);
-        }
-
+        deleteButton.gameObject.SetActive(false); // Hide the delete button
         Debug.Log("Word cleared and buttons reset.");
     }
 
     public void AssignLettersToZones()
     {
         List<char> availableLetters = new List<char>(possibleLetters);
+        List<char> vowels = new List<char> { 'A', 'E', 'I', 'O', 'U' };
 
-        foreach (var zone in letterZones)
+        // Randomly select positions for two vowels
+        int firstVowelPosition = Random.Range(0, letterZones.Length);
+        int secondVowelPosition;
+
+        do
         {
+            secondVowelPosition = Random.Range(0, letterZones.Length);
+        } while (secondVowelPosition == firstVowelPosition);
+
+        // Assign vowels to their respective zones
+        for (int i = 0; i < 2; i++)
+        {
+            int vowelIndex = Random.Range(0, vowels.Count);
+            char randomVowel = vowels[vowelIndex];
+
+            letterZones[i == 0 ? firstVowelPosition : secondVowelPosition].SetLetter(randomVowel);
+            Debug.Log($"Assigned vowel {randomVowel} to zone");
+
+            vowels.RemoveAt(vowelIndex);
+        }
+
+        // Assign remaining letters to the other letter zones
+        for (int i = 0; i < letterZones.Length; i++)
+        {
+            if (i == firstVowelPosition || i == secondVowelPosition) continue;
+
             if (availableLetters.Count > 0)
             {
                 int randomIndex = Random.Range(0, availableLetters.Count);
-
                 char randomLetter = availableLetters[randomIndex];
-                zone.SetLetter(randomLetter);
 
-                availableLetters.RemoveAt(randomIndex);
+                // Set the letter and its score in the letter zone
+                letterZones[i].SetLetter(randomLetter);
+                availableLetters.RemoveAt(randomIndex); // Remove the letter from the available list
             }
         }
     }
 
-    // Function to collect a letter when the ball collides with a zone
-    public void CollectLetter(char letter)
+
+    public void CollectLetter(UsableLetter usableLetter)
     {
-        if (collectedLetters.Count >= maxCollectedLetters) return;
+        // Don't allow more letters to be collected than the maximum
+        if (collectedUsableLetters.Count >= maxCollectedLetters) return;
 
-        collectedLetters.Add(letter);
+        // Add the letter to the collection
+        collectedUsableLetters.Add(usableLetter);
 
+        // Create the letter button
         GameObject letterButton = Instantiate(letterButtonPrefab, letterButtonContainer);
         TextMeshProUGUI buttonText = letterButton.GetComponentInChildren<TextMeshProUGUI>();
 
-        int letterScore = 1;
+        // Set the button text to display the letter and its score
+        buttonText.text = $"{usableLetter.Letter}<size=70%><sub>{usableLetter.Score}</sub></size>";
 
-        if (letterPoints.TryGetValue(letter, out int baseScore))
-        {
-            letterScore = baseScore;
-        }
-
-        // Update button text to show letter and its score as subscript
-        if (buttonText != null)
-        {
-            buttonText.text = $"{letter}<size=70%><sub>{letterScore}</sub></size>";
-        }
-
+        // Position the button in the UI
         RectTransform buttonRectTransform = letterButton.GetComponent<RectTransform>();
         buttonRectTransform.anchoredPosition = new Vector2(currentXPosition, 0);
         currentXPosition += buttonSpacing;
 
-        // Add a listener to the button click event
+        // Add an onClick listener to the button
         letterButton.GetComponent<Button>().onClick.AddListener(() =>
         {
-            if (collectedLetters.Count < maxCollectedLetters) return;
-            AddLetterToWord(letter);
-            letterButton.SetActive(false); // Disable button after it's clicked
+            // Add the letter to the word (if not already at max letters)
+            AddLetterToWord(usableLetter.Letter);
+
+            // Disable the button after it's used
+            letterButton.SetActive(false);
         });
 
-        if (collectedLetters.Count == maxCollectedLetters)
+        // Disable shooting if the max letters have been collected
+        if (collectedUsableLetters.Count == maxCollectedLetters)
         {
             DisableShooting();
+            DisableAllPegs();
+
         }
     }
-    public void UpdateLetterScore(char letter, int newScore)
+
+    public void DisableAllPegs()
     {
-        // Find the button corresponding to this letter
+        foreach (GameObject peg in allPegs)
+        {
+            peg.SetActive(false); // Disable each peg in the list
+        }
+    }
+
+
+    public void UpdateLetterScore(UsableLetter usableLetter, int newScore)
+    {
         foreach (Transform child in letterButtonContainer)
         {
             TextMeshProUGUI buttonText = child.GetComponentInChildren<TextMeshProUGUI>();
-            if (buttonText != null && buttonText.text.StartsWith(letter.ToString()))
+            if (buttonText != null && buttonText.text.StartsWith(usableLetter.Letter.ToString()))
             {
-                // Update the letter score in the button's text
-                buttonText.text = $"{letter}<size=70%><sub>{newScore}</sub></size>";
+                buttonText.text = $"{usableLetter.Letter}<size=70%><sub>{newScore}</sub></size>";
             }
         }
     }
@@ -179,16 +189,10 @@ public class GameManager : MonoBehaviour
     private void DisableShooting()
     {
         canShoot = false;
-
-        if (wordInputText != null)
-            wordInputText.gameObject.SetActive(true); 
-        if (submitButton != null)
-            submitButton.gameObject.SetActive(true); 
-        if (feedbackText != null)
-            feedbackText.gameObject.SetActive(true);
-        if (resetButton != null)
-            resetButton.gameObject.SetActive(true);
-
+        wordInputText.gameObject.SetActive(true);
+        submitButton.gameObject.SetActive(true);
+        feedbackText.gameObject.SetActive(true);
+        resetButton.gameObject.SetActive(true);
         Debug.Log("Shooting disabled. Player must now input a word.");
     }
 
@@ -196,55 +200,38 @@ public class GameManager : MonoBehaviour
     {
         currentWord.Add(letter);
         UpdateWordInputUI();
-
-        if (deleteButton != null)
-        {
-            deleteButton.gameObject.SetActive(true);
-        }
+        deleteButton.gameObject.SetActive(true);
     }
 
     public void ResetGame()
     {
-        collectedLetters.Clear();
+        collectedUsableLetters.Clear();
         currentWord.Clear();
+        ResetPegs();
 
         foreach (Transform child in letterButtonContainer)
         {
-            Destroy(child.gameObject); // Remove all letter buttons from UI
+            Destroy(child.gameObject);
         }
+
         UpdateWordInputUI();
         AssignLettersToZones();
         currentXPosition = -135f;
-        if (wordInputText != null)
-            wordInputText.gameObject.SetActive(false);
 
-        if (submitButton != null)
-            submitButton.gameObject.SetActive(false);
-
-        if (deleteButton != null)
-            deleteButton.gameObject.SetActive(false);
-
-        if (feedbackText != null)
-        {
-            feedbackText.text = "";
-            feedbackText.gameObject.SetActive(false);
-        }
-
-        if (resetButton != null)
-            resetButton.gameObject.SetActive(false);
-
-        if (scoreText != null)
-        {
-            scoreText.text = "Score: ";
-            //scoreText.gameObject.SetActive(false);
-        }
+        wordInputText.gameObject.SetActive(false);
+        submitButton.gameObject.SetActive(false);
+        deleteButton.gameObject.SetActive(false);
+        feedbackText.text = "";
+        feedbackText.gameObject.SetActive(false);
+        resetButton.gameObject.SetActive(false);
+        scoreText.text = "Score: ";
 
         canShoot = true;
     }
 
-    public List<char> GetCollectedLetters()
+    public List<UsableLetter> GetCollectedUsableLetters()
     {
-        return new List<char>(collectedLetters);
+        return new List<UsableLetter>(collectedUsableLetters);
     }
 
     public string GetCurrentWord()
@@ -259,70 +246,81 @@ public class GameManager : MonoBehaviour
 
     public void OnSubmitWord()
     {
-        // Get the word from the input field
         string playerWord = wordInputText.text;
 
-        // Validate the word using the WordValidator script
         if (wordValidator.ValidateWord(playerWord))
         {
             int wordScore = CalculateWordScore(playerWord);
-            //totalScore += wordScore; // Update total score
-            if (scoreText != null)
-                scoreText.text = "Score: " + wordScore; // Display updated score
+            scoreText.text = "Score: " + wordScore;
             feedbackText.text = "Valid word! You scored " + wordScore + " points!";
 
             if (wordScore > highscore)
             {
                 highscore = wordScore;
-
-                // Save the new high score using PlayerPrefs
                 PlayerPrefs.SetInt("Highscore", highscore);
-                PlayerPrefs.Save(); // Ensure the high score is saved
-
-                // Update the high score UI
-                if (highscoreText != null)
-                {
-                    highscoreText.text = "Highscore: " + highscore;
-                }
-
+                PlayerPrefs.Save();
+                highscoreText.text = "Highscore: " + highscore;
                 Debug.Log("New highscore: " + highscore);
             }
+
+            //wordInputText.text = string.Empty;
         }
         else
         {
             feedbackText.text = "Invalid word!";
         }
     }
+
     private int CalculateWordScore(string word)
     {
         int wordScore = 0;
         foreach (char letter in word.ToUpper())
         {
-            if (letterPoints.ContainsKey(letter))
+            // Check if the letter was collected and is part of the usable letters
+            UsableLetter usableLetter = collectedUsableLetters.Find(l => l.Letter == letter);
+            if (usableLetter != null)
             {
-                wordScore += letterPoints[letter];
+                // Add the score of the collected letter
+                wordScore += usableLetter.Score;
             }
         }
         return wordScore;
     }
 
-    public void AddPointsToLetter(char letter, int points)
+    public void AddPointsToLetter(UsableLetter usableLetter, int points)
     {
-        if (letterPoints.ContainsKey(letter))
+        foreach (var letter in collectedUsableLetters)
         {
-            letterPoints[letter] = points;
-            Debug.Log($"Letter {letter} score updated to {letterPoints[letter]}");
-
-            // Optionally, you can update the UI here if you're tracking letter-specific scores in the UI
+            if (letter.Letter == usableLetter.Letter)
+            {
+                letter.Score += points;
+                Debug.Log($"Letter {letter.Letter} score updated to {letter.Score}");
+                return;
+            }
         }
     }
 
     public int GetLetterBaseScore(char letter)
     {
-        if (letterPoints.ContainsKey(letter))
+        return letterPoints.TryGetValue(letter, out int score) ? score : 0;
+    }
+
+    public void RegisterPeg(GameObject peg)
+    {
+        if (!allPegs.Contains(peg))
         {
-            return letterPoints[letter];  // Return the base score for that letter
+            allPegs.Add(peg);
         }
-        return 0;  // Default to 0 if the letter isn't found
+    }
+
+    private void ResetPegs()
+    {
+        foreach (GameObject peg in allPegs)
+        {
+            if (peg != null)
+            {
+                peg.SetActive(true);
+            }
+        }
     }
 }

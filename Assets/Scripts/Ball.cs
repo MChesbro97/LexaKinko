@@ -115,9 +115,6 @@ public class Ball : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Launches the ball in the calculated direction and enables gravity.
-    /// </summary>
     void LaunchBall()
     {
         rb.isKinematic = false;
@@ -128,8 +125,6 @@ public class Ball : MonoBehaviour
         
         hasCollectedLetter = false;
 
-        // Optional: Add torque or other forces if needed
-        // rb.AddTorque(5f, ForceMode2D.Impulse);
     }
 
     public void ResetBall()
@@ -146,27 +141,24 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("LetterZone"))
+        if (collision.gameObject.CompareTag("LetterZone") && !hasCollectedLetter && CanCollectLetter())
         {
             LetterZone letterZone = collision.gameObject.GetComponent<LetterZone>();
             if (letterZone != null)
             {
-                // Get the base score of the letter
-                int baseScore = gameManager.GetLetterBaseScore(letterZone.assignedLetter);
-
-                // Add accumulated points from peg hits
-                int totalScore = baseScore + accumulatedPoints;
-
-                // Update the score in the GameManager
-                gameManager.AddPointsToLetter(letterZone.assignedLetter, totalScore);
-
-                // Update the letter button to reflect the new score
-                gameManager.UpdateLetterScore(letterZone.assignedLetter, totalScore);
-
-                // Reset the accumulated points after applying them
+                UsableLetter usableLetter = letterZone.GetUsableLetter();
+                usableLetter.AddPoints(accumulatedPoints); 
+                gameManager.CollectLetter(usableLetter);
                 accumulatedPoints = 0;
+                MarkLetterAsCollected();
+                ResetBall();
             }
-            ResetBall();
+        }
+
+        if (collision.gameObject.CompareTag("Peg"))
+        {
+            // Accumulate points from pegs
+            accumulatedPoints += 1; // You can tweak this value based on your scoring system.
         }
     }
 
@@ -179,12 +171,6 @@ public class Ball : MonoBehaviour
     {
         hasCollectedLetter = true;
         lastCollectionTime = Time.time; // Update the last collection time
-    }
-
-    public void AccumulatePointFromPeg()
-    {
-        accumulatedPoints += 1;
-        Debug.Log("Accumulated Points: " + accumulatedPoints);
     }
 
 }

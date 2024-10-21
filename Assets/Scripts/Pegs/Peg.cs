@@ -10,6 +10,12 @@ public class Peg : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+
+        if (gameManager != null)
+        {
+            gameManager.RegisterPeg(this.gameObject);
+        }
+
         reactivationPeg = FindObjectOfType<ReactivationPeg>();
     }
 
@@ -22,7 +28,7 @@ public class Peg : MonoBehaviour
             if (ball != null)
             {
                 // Accumulate 1 point in the ball for hitting the peg
-                ball.AccumulatePointFromPeg();
+                //ball.AccumulatePointFromPeg();
 
                 // Deactivate the peg after being hit
                 gameObject.SetActive(false);

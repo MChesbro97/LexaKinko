@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4407114692495577463}
   m_Layer: 0
   m_Name: Peg
-  m_TagString: Untagged
+  m_TagString: Peg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,63 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class LetterZone : MonoBehaviour
 {
-    public char assignedLetter;
-    public TextMeshProUGUI letterText;
-    private GameManager gameManager; 
+    public char assignedLetter; // The letter assigned to this zone
+    private int baseScore; // The base score for the assigned letter
 
-    private void Start()
+    // Optional: Reference to GameManager if you need to access it directly
+    private GameManager gameManager;
+
+    public TMP_Text letterDisplay;
+
+    private void Awake()
     {
-        // Find the GameManager in the scene
+        // Optionally, find the GameManager
         gameManager = FindObjectOfType<GameManager>();
-
-        UpdateLetterText();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    // Method to assign a letter to this zone
+    public void SetLetter(char letter)
     {
-        if (collision.gameObject.CompareTag("Ball"))
+        assignedLetter = letter;
+        baseScore = gameManager.GetLetterBaseScore(letter);
+
+        UpdateLetterDisplay();
+    }
+
+    // Method to get a UsableLetter object from this zone
+    public UsableLetter GetUsableLetter()
+    {
+        return new UsableLetter(assignedLetter, baseScore);
+    }
+
+    private void UpdateLetterDisplay()
+    {
+        if (letterDisplay != null)
         {
-            Ball ball = collision.gameObject.GetComponent<Ball>();
-
-            if (ball != null && ball.CanCollectLetter()) // Check if the ball can collect the letter
-            {
-                // Add the letter to the GameManager
-                gameManager.CollectLetter(assignedLetter);
-                ball.MarkLetterAsCollected(); // Mark letter as collected
-
-                // Disable this collider to prevent further collections (optional)
-                // collider.enabled = false;
-
-                Debug.Log("Collected letter: " + assignedLetter);
-            }
+            letterDisplay.text = $"{assignedLetter}<size=70%><sub>{baseScore}</sub></size>";
+        }
+        else
+        {
+            Debug.LogWarning("Letter display is not assigned!");
         }
     }
-
-    // Function to set a new letter when the ball resets
-    public void SetLetter(char newLetter)
-    {
-        assignedLetter = newLetter;
-        UpdateLetterText();
-    }
-
-    private void UpdateLetterText()
-    {
-        if (letterText != null && gameManager != null)
-        {
-            // Fetch the score for the assignedLetter from GameManager's letterPoints dictionary
-            int letterScore = 1; // Default value in case the letter is not found (though it should always be found)
-
-            if (gameManager.letterPoints.TryGetValue(assignedLetter, out int score))
-            {
-                letterScore = score;
-            }
-
-            // Update the text to show the letter and its score as a subscript
-            letterText.text = $"{assignedLetter}<size=70%><sub>{letterScore}</sub></size>";
-        }
-    }
+    // Add more functionality as needed (like triggering when a ball enters the zone)
 }
